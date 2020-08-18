@@ -51,6 +51,15 @@ pub struct PartiallySignedTransaction {
 }
 
 impl PartiallySignedTransaction {
+
+    /// Create a PartiallySignedTransaction from hex string, error
+    /// if not unsigned
+    pub fn from_hex_string(hex: &str) -> PartiallySignedTransaction {
+        let bz = &<Vec<u8> as crate::hashes::hex::FromHex>::from_hex(hex).unwrap();
+        let psbt: Result<PartiallySignedTransaction, _> = crate::consensus::deserialize(bz);
+        psbt.unwrap()
+    }
+
     /// Create a PartiallySignedTransaction from an unsigned transaction, error
     /// if not unsigned
     pub fn from_unsigned_tx(tx: Transaction) -> Result<Self, self::Error> {
