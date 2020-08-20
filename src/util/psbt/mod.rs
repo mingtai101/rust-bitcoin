@@ -64,7 +64,7 @@ impl PartiallySignedTransaction {
 
     /// Convert PartiallySignedTransaction to hex string, error
     /// if not unsigned
-    pub fn to_hex_string(&self) -> Option<String> {
+    pub fn to_hex_string(self) -> Option<String> {
         let vec1 = crate::consensus::serialize(self);
         let hex = vec1.to_hex();
         return Some(hex);
