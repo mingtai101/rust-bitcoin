@@ -37,6 +37,8 @@ pub mod serialize;
 mod map;
 pub use self::map::{Map, Global, Input, Output};
 
+pub use crate::hashes::hex::ToHex;
+
 /// A Partially Signed Transaction.
 #[derive(Debug, Clone, PartialEq)]
 pub struct PartiallySignedTransaction {
@@ -58,6 +60,14 @@ impl PartiallySignedTransaction {
         let bz = &<Vec<u8> as crate::hashes::hex::FromHex>::from_hex(hex).unwrap();
         let psbt: Result<PartiallySignedTransaction, _> = crate::consensus::deserialize(bz);
         psbt.unwrap()
+    }
+
+    /// Convert PartiallySignedTransaction to hex string, error
+    /// if not unsigned
+    pub fn to_hex_string(&self) -> Option<String> {
+        let vec1 = crate::consensus::serialize(self);
+        let hex = vec1.to_hex();
+        return Some(hex);
     }
 
     /// Create a PartiallySignedTransaction from an unsigned transaction, error
