@@ -56,14 +56,10 @@ impl PartiallySignedTransaction {
 
     /// Create a PartiallySignedTransaction from hex string, error
     /// if not unsigned
-    pub fn from_hex_string(hex: &str) -> Option<PartiallySignedTransaction> {
+    pub fn from_hex_string(hex: &str) -> PartiallySignedTransaction {
         let bz = &<Vec<u8> as crate::hashes::hex::FromHex>::from_hex(hex).unwrap();
         let psbt: Result<PartiallySignedTransaction, _> = crate::consensus::deserialize(bz);
-        let o = match psbt {
-            Ok(r) => r,
-            Err(_e) => return None,
-        }
-        return Some(o);
+        psbt.unwrap()
     }
 
     /// Convert PartiallySignedTransaction to hex string, error
